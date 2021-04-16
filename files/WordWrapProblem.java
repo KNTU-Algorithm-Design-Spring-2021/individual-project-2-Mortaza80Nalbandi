@@ -7,7 +7,7 @@ public class WordWrapProblem {
         System.out.println("Enter the number of Words : ");
         int n = scanner.nextInt();
         System.out.println("Enter the Length of lines : ");
-        int M = scanner.nextInt();
+        long M = scanner.nextInt();
         String[] words = new String[n];
         long[] length = new long[n];
         for (int i = 0; i < n; i++) {
@@ -19,14 +19,14 @@ public class WordWrapProblem {
     }
 
     public static void findMinCost(long[] length, String[] words, int n, long M) {
-        long[][] extraSpaaces = new long[n + 1][n + 1];//for [i][j] ,storing extra spaces in the end of line for words i to j in it
-        long[][] costs = new long[n + 1][n + 1];//for [i][j] ,the cost for keeping these words from i to j one line
-        long[] leastCost = new long[n + 1];//for [i],the least cost for words from 1 to j in the paragraph
+        long[][] extraSpaces = new long[n + 1][n + 1];//for [i][j] ,extra spaces in the end of line for words i to j in it
+        long[][] costs = new long[n + 1][n + 1];//for [i][j] ,the cost for keeping these words from i to j in one line
+        long[] leastCost = new long[n + 1];//for [i],the least cost for words from 1 to i in the paragraph
         int[] print = new int[n + 1];//keep indexs for printing the line
         for (int i = 1; i <= n; i++) {
-            extraSpaaces[i][i] = M - length[i - 1];
+            extraSpaces[i][i] = M - length[i - 1];
             for (int j = i + 1; j <= n; j++) {
-                extraSpaaces[i][j] = extraSpaaces[i][j - 1] - length[j - 1] - 1;
+                extraSpaces[i][j] = extraSpaces[i][j - 1] - length[j - 1] - 1;
             }
         }
         //c[i][j] = (M-v[k])^3
@@ -35,12 +35,12 @@ public class WordWrapProblem {
         //(j-i) is the spaces betwenn words
         for (int i = 1; i <= n; i++) {
             for (int j = i; j <= n; j++) {
-                if (extraSpaaces[i][j] < 0) {
+                if (extraSpaces[i][j] < 0) {
                     costs[i][j] = Long.MAX_VALUE;
-                } else if (extraSpaaces[i][j] >= 0 && j == n) {
+                } else if (extraSpaces[i][j] >= 0 && j == n) {
                     costs[i][j] = 0;
                 } else {
-                    costs[i][j] = extraSpaaces[i][j] * extraSpaaces[i][j] * extraSpaaces[i][j];
+                    costs[i][j] = extraSpaces[i][j] * extraSpaces[i][j] * extraSpaces[i][j];
                 }
 
             }
